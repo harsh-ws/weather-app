@@ -77,8 +77,12 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => CityScreen()));
+                    onPressed: () async{
+                      var cityName = await Navigator.push(context, MaterialPageRoute(builder: (context) => CityScreen()));
+                      if (cityName != null){
+                        var weatherData = await weather.getCityWeather(cityName);
+                        updateUi(weatherData);
+                      }
                     },
                     child: Icon(
                       Icons.location_city,
@@ -102,13 +106,10 @@ class _LocationScreenState extends State<LocationScreen> {
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(right: 15.0),
-                child: Text(
-                  "$weatherMessage in \n $city !",
-                  textAlign: TextAlign.right,
-                  style: kMessageTextStyle,
-                ),
+              Text(
+                "$weatherMessage in \n $city !",
+                textAlign: TextAlign.right,
+                style: kMessageTextStyle,
               ),
             ],
           ),
